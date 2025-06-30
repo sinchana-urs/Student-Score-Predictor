@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance & Education Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+        }
+        .wallet-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .transaction-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .animated-loading {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg text-white">
+    <div class="container mx-auto px-4 py-8">
+        <header class="flex justify-between items-center mb-8">
+            <div class="flex items-center space-x-4">
+                
+                <h1 class="text-2xl font-bold">Finance & Education Dashboard</h1>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="text-sm">Welcome, Student</span>
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4241efc1-20d8-4e67-a71c-56224a3aaa70.png" alt="User profile picture - young student with dark hair" class="rounded-full">
+            </div>
+        </header>
+
+        <div class="tabs flex border-b border-gray-200 mb-6">
+            <button class="tab-btn py-2 px-4 font-medium focus:outline-none border-b-2 border-transparent hover:border-white transition-all" data-tab="wallet">FinTech Wallet</button>
+            <button class="tab-btn py-2 px-4 font-medium focus:outline-none border-b-2 border-transparent hover:border-white transition-all" data-tab="score-predictor">Score Predictor</button>
+        </div>
+
+        <!-- FinTech Wallet Tab -->
+        <div id="wallet" class="tab-content active">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Wallet Balance Card -->
+                <div class="wallet-card rounded-xl p-6 col-span-1">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold">Wallet Balance</h2>
+                        <span class="text-sm">Monthly</span>
+                    </div>
+                    <div class="flex items-end space-x-2 mb-4">
+                        <span class="text-3xl font-bold">$4,275.50</span>
+                        <span class="text-green-400 text-sm">+2.5%</span>
+                    </div>
+                    <canvas id="balanceChart" height="120"></canvas>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="wallet-card rounded-xl p-6">
+                    <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <button class="flex flex-col items-center justify-center p-4 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 transition-colors">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/384642dd-eac9-4c0e-8e7f-a121a2065fff.png" alt="Send arrow icon - upward curved arrow" class="mb-2">
+                            <span>Send</span>
+                        </button>
+                        <button class="flex flex-col items-center justify-center p-4 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 transition-colors">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/18d69ba9-02a5-40ba-a9a0-9190d8a5689a.png" alt="Request icon - downward curved arrow" class="mb-2">
+                            <span>Request</span>
+                        </button>
+                        <button class="flex flex-col items-center justify-center p-4 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 transition-colors">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/335b6519-1552-4d7b-8b06-7d69eb7e2e77.png" alt="Pay icon - credit card" class="mb-2">
+                            <span>Pay</span>
+                        </button>
+                        <button class="flex flex-col items-center justify-center p-4 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 transition-colors">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c56db190-0b8c-4e69-8bf4-1a77c9d0b09c.png" alt="Invest icon - upward trending graph" class="mb-2">
+                            <span>Invest</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div class="wallet-card rounded-xl p-6 col-span-1 md:col-span-3">
+                    <h2 class="text-xl font-semibold mb-4">Recent Transactions</h2>
+                    <div class="space-y-3 transaction-list">
+                        <div class="transaction-item flex items-center justify-between p-4 bg-white bg-opacity-5 rounded-lg hover:bg-opacity-10 transition-all">
+                            <div class="flex items-center space-x-3">
+                                <div class="p-3 rounded-full bg-purple-500">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/af37d822-2662-4937-8dda-81a2e168bac5.png" alt="Grocery store icon - shopping basket" class="w-4 h-4">
+                                </div>
+                                <div>
+                                    <p class="font-medium">Grocery Store</p>
+                                    <p class="text-xs text-gray-300">Today, 10:30 AM</p>
+                                </div>
+                            </div>
+                            <span class="font-medium">-$42.75</span>
+                        </div>
+                        <div class="transaction-item flex items-center justify-between p-4 bg-white bg-opacity-5 rounded-lg hover:bg-opacity-10 transition-all">
+                            <div class="flex items-center space-x-3">
+                                <div class="p-3 rounded-full bg-blue-500">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b7983ef7-6514-4035-9ff3-58ff43b737d9.png" alt="Bank transfer icon - two arrows forming a circle" class="w-4 h-4">
+                                </div>
+                                <div>
+                                    <p class="font-medium">Bank Transfer</p>
+                                    <p class="text-xs text-gray-300">Yesterday, 3:15 PM</p>
+                                </div>
+                            </div>
+                            <span class="text-green-400 font-medium">+$500.00</span>
+                        </div>
+                        <div class="transaction-item flex items-center justify-between p-4 bg-white bg-opacity-5 rounded-lg hover:bg-opacity-10 transition-all">
+                            <div class="flex items-center space-x-3">
+                                <div class="p-3 rounded-full bg-yellow-500">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c11f096d-9dcf-4c5e-96e8-6f8188019e3b.png" alt="Restaurant icon - fork and knife" class="w-4 h-4">
+                                </div>
+                                <div>
+                                    <p class="font-medium">Restaurant</p>
+                                    <p class="text-xs text-gray-300">Yesterday, 8:45 PM</p>
+                                </div>
+                            </div>
+                            <span class="font-medium">-$78.30</span>
+                        </div>
+                    </div>
+                    <button class="mt-4 w-full py-2 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 transition-colors">View All Transactions</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Score Predictor Tab -->
+        <div id="score-predictor" class="tab-content">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Input Form -->
+                <div class="wallet-card rounded-xl p-6 col-span-1">
+                    <h2 class="text-xl font-semibold mb-4">Score Prediction</h2>
+                    <form id="scorePredictorForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Study Hours (per week)</label>
+                            <input type="number" id="studyHours" class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Previous Test Score</label>
+                            <input type="number" id="prevScore" class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Attendance Rate (%)</label>
+                            <input type="number" id="attendance" class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        </div>
+                        <button type="submit" class="w-full py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium transition-colors">Predict Score</button>
+                    </form>
+                </div>
+
+                <!-- Prediction Result -->
+                <div class="wallet-card rounded-xl p-6 col-span-2">
+                    <h2 class="text-xl font-semibold mb-4">Prediction Result</h2>
+                    <div id="predictionResult" class="flex flex-col items-center justify-center h-full">
+                        <div class="text-center p-6">
+                            <div id="predictedScore" class="text-5xl font-bold mb-2">-</div>
+                            <p id="predictionMessage" class="text-gray-300">Enter your data to get a prediction</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Historical Data Chart -->
+                <div class="wallet-card rounded-xl p-6 col-span-1 md:col-span-3">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold">Performance Trends</h2>
+                        <select id="chartTimeframe" class="bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg px-3 py-2 text-sm focus:outline-none">
+                            <option>Last 6 Months</option>
+                            <option>Last Year</option>
+                            <option>All Time</option>
+                        </select>
+                    </div>
+                    <canvas id="performanceChart" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Hide all tab contents
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Show selected tab content
+                document.getElementById(tabId).classList.add('active');
+                
+                // Update active tab button styling
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('border-white');
+                });
+                this.classList.add('border-white');
+            });
+        });
+
+        // Initialize FinTech charts
+        const balanceCtx = document.getElementById('balanceChart').getContext('2d');
+        const balanceChart = new Chart(balanceCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                datasets: [{
+                    data: [3000, 3500, 3800, 4000, 4275],
+                    borderColor: 'rgba(255, 255, 255, 0.7)',
+                    backgroundColor: 'rgba(167, 119, 227, 0.2)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Initialize Performance chart
+        const perfCtx = document.getElementById('performanceChart').getContext('2d');
+        const performanceChart = new Chart(perfCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Mathematics', 'Science', 'English', 'History', 'Computer Science'],
+                datasets: [{
+                    label: 'Current Scores',
+                    data: [78, 85, 92, 81, 95],
+                    backgroundColor: 'rgba(110, 142, 251, 0.7)'
+                }, {
+                    label: 'Predicted Scores',
+                    data: [85, 88, 93, 86, 97],
+                    backgroundColor: 'rgba(167, 119, 227, 0.7)'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: 'white'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        }
+                    },
+                    y: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Score Prediction Form Handler
+        document.getElementById('scorePredictorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const studyHours = parseFloat(document.getElementById('studyHours').value);
+            const prevScore = parseFloat(document.getElementById('prevScore').value);
+            const attendance = parseFloat(document.getElementById('attendance').value);
+            
+            if (isNaN(studyHours) || isNaN(prevScore) || isNaN(attendance)) {
+                alert('Please enter valid numbers for all fields.');
+                return;
+            }
+            
+            // Simple linear regression prediction model
+            // These are example coefficients - a real model would be trained on actual data
+            const predictedScore = 50 + 
+                                 (studyHours * 3.5) + 
+                                 (prevScore * 0.4) + 
+                                 (attendance * 0.2);
+            
+            // Cap the score between 0 and 100
+            const finalScore = Math.max(0, Math.min(100, Math.round(predictedScore)));
+            
+            document.getElementById('predictedScore').textContent = finalScore;
+            
+            let message = '';
+            if (finalScore >= 90) {
+                message = 'Excellent! Your current habits should lead to outstanding results.';
+            } else if (finalScore >= 75) {
+                message = 'Good performance! You might consider increasing study hours slightly.';
+            } else if (finalScore >= 60) {
+                message = 'Average result. Consider improving study habits or attendance.';
+            } else {
+                message = 'Needs improvement. Please review your study strategies with an advisor.';
+            }
+            
+            document.getElementById('predictionMessage').textContent = message;
+            
+            // Update the performance chart with new prediction
+            const randomSubjectIndex = Math.floor(Math.random() * performanceChart.data.labels.length);
+            performanceChart.data.datasets[1].data[randomSubjectIndex] = finalScore + 5;
+            performanceChart.update();
+        });
+
+        // Timeframe selector handler
+        document.getElementById('chartTimeframe').addEventListener('change', function() {
+            // In a real app, this would fetch new data based on the timeframe
+            // For this demo, we'll just simulate it by randomizing existing data
+            performanceChart.data.datasets[0].data = performanceChart.data.datasets[0].data.map(() => 
+                Math.floor(Math.random() * 30) + 70);
+            performanceChart.update();
+        });
+    </script>
+</body>
+</html>
+
